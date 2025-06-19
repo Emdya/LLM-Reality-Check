@@ -123,6 +123,78 @@ class KnowledgeCorpus:
         except Exception as e:
             print(f"PubMed fetch error: {str(e)}")
 
+     def add_from_wikipedia(self, query: str, max_results: int = 10):
+        """Fetch articles from Wikipedia"""
+        base_url = "https://en.wikipedia.org/w/api.php"
+        params = {
+            "action": "query",
+            "format": "json",
+            "list": "search",
+            "srsearch": query,
+            "srlimit": max_results
+        }
+        
+        try:
+            response = requests.get(base_url, params=params)
+            data = response.json()
+            
+            for result in data.get("query", {}).get("search", []):
+                page_id = result.get("pageid")
+                title = result.get("title")
+                
+                if page_id and title:
+                    content_url = "https://en.wikipedia.org/w/api.php"
+                    content_params = {
+                        "action": "query",
+                        "format": "json",
+                        "prop": "extracts",
+                        "pageids": page_id,
+                        "exintro": True,
+                        "explaintext": True
+                    }
+                    
+                    content_response = requests.get(content_url, params=content_params)
+                    content_data = content_response.json()
+                    extract = content_data.get("query", {}).get("pages", {}).get(str(page_id), {}).get("extract", "")
+                    
+                    if extract:
+                        self._add_entry({
+                            "source": "wikipedia",
+                            "source_id": str(page_id),
+                            "content": self._clean_text(f"{title}. {extract}"),
+                            "metadata": {
+                                "query": query,
+                                "added": time.time()
+                            }
+                        })
+                        
+        except Exception as e:
+            print(f"Error fetching from Wikipedia: {str(e)}")
+
+    def add_from_scholar(self, query: str, max_results: int = 10):
+        """Fetch articles from Google Scholar"""
+        try:
+            search_query = scholarly.search_pubs(query)
+            
+            for i, result in enumerate(search_query):
+                if i >= max_results:
+                    break
+                
+                if result.get("bib", {}).get("abstract"):
+                    self._add_entry({
+                        "source": "scholar",
+                        "source_id": result.get("author_id", ""),
+                        "content": self._clean_text(result["bib"]["abstract"]),
+                        "metadata": {
+                            "query": query,
+                            "title": result["bib"].get("title", ""),
+                            "added": time.time()
+                        }
+                    })
+                    
+        except Exception as e:
+            print(f"Error fetching from Google Scholar: {str(e)}")
+
     # ... (similar detailed docs for Wikipedia/Scholar methods)
 
     def _add_entry(self, entry: Dict):
