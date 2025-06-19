@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 conn = sqlite3.connect("interactions.db", check_same_thread = False)
 cursor = conn.cursor()
@@ -9,15 +10,17 @@ cursor.execute('''
         prompt TEXT,
         response TEXT,
         timestamp TEXT,
-        similarity_score REAL
+        similarity_score REAL,
+        summary TEXT
     )
 ''')
 
 conn.commit()
 
-def log_interaction(submission, score):
+def log_interaction(prompt, response, score, summary):
+    timestamp = datetime.utcnow().isoformat()
     cursor.execute('''
-        INSERT INTO interactions (prompt, response, timestamp, similarity_score)
-        VALUES (?, ?, ?, ?)
-    ''', (submission.prompt, submission.response, submission.timestamp, score))
+        INSERT INTO interactions (prompt, response, timestamp, similarity_score, summary)
+        VALUES (?, ?, ?, ?, ?)
+    ''', (prompt, response, timestamp, score, summary))
     conn.commit()

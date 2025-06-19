@@ -21,6 +21,13 @@ class KnowledgeCorpus:
         os.makedirs(corpus_dir, exist_ok=True)
         self._load_or_initialize_corpus()
 
+    def clear(self):
+        """Clear the corpus and its FAISS index"""
+        self.entries = []
+        self.index = None
+        self.id_to_entry = {}
+        print("knowledge corpus cleared")
+
     def _load_or_initialize_corpus(self):
         """Load existing corpus or create new one"""
         if os.path.exists(self.corpus_file):
