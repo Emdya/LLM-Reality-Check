@@ -1,23 +1,22 @@
-# vector_search.py
-from sentence_transformers import SentenceTransformer
-import faiss
+from knowledge_corpus import KnowledgeCorpus  # Assuming you saved the previous code in knowledge_corpus.py
 import numpy as np
+from typing import Tuple
 
-model = SentenceTransformer("all-MiniLM-L6-v2")
-
-# Load your knowledge base (e.g. trusted source docs)
-with open("corpus.txt", "r") as f:
-    corpus = f.readlines()
-corpus_embeddings = model.encode(corpus, convert_to_numpy=True)
-
-# Build FAISS index
-dimension = corpus_embeddings.shape[1]
-index = faiss.IndexFlatL2(dimension)
-index.add(corpus_embeddings)
-
-def search(text_chunk: str):
-    query_vec = model.encode([text_chunk])[0]
-    D, I = index.search(np.array([query_vec]), k=1)
-    match_index = I[0][0]
-    similarity = 1 - D[0][0]  # lower distance = higher similarity
-    return corpus[match_index], similarity
+class VectorSearch:
+    def __init__(self, corpus_path: str = "knowledge_corpus"):
+        self.corpus = KnowledgeCorpus(corpus_path)
+        
+    def search(self, text_chunk: str, threshold: float = 0.75) -> Tuple[str, float]:
+        """Search the knowledge corpus and return best match with similarity score"""
+        results = self.corpus.search(text_chunk, k=1)
+        
+        if not results:
+            return "", 0.0
+            
+        best_match, similarity = results[0]
+        return best_match, similarity
+        
+    def is_hallucination(self, text_chunk: str, threshold: float = 0.75) -> bool:
+        """Determine if text is likely a hallucination"""
+        _, similarity = self.search(text_chunk, threshold)
+        return similarity < threshold
