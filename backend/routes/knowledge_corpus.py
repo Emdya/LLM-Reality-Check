@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from scholarly import scholarly
+from sklearn.preprocessing import normalize
 from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
@@ -195,8 +196,9 @@ class KnowledgeCorpus:
         if not self.index or not self.corpus:
             return []
             
-        query_embedding = self.model.encode([query])[0]
-        D, I = self.index.search(np.array([query_embedding]), k)
+        query_embedding = self.model.encode([query],convert_to_numpy=True)
+        query_embedding= normalize(query_embedding,norm='l2')
+        D, I = self.index.search(query_embedding, k)
         
         results = []
         for i in range(k):
@@ -204,7 +206,7 @@ class KnowledgeCorpus:
             if idx >= len(self.corpus):  # Handle cases where k > corpus size
                 continue
                 
-            similarity = 1 - D[0][i]
+            similarity = 1 - D[0][i] # D now directly contains cosine similarity (0–1)
             results.append((self.corpus[idx]["content"], similarity))
             
         return results

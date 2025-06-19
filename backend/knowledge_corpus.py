@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from scholarly import scholarly
 from sentence_transformers import SentenceTransformer
 import faiss
+from sklearn.preprocessing import normalize 
 import numpy as np
 import os
 import json
@@ -34,18 +35,19 @@ class KnowledgeCorpus:
         self._build_index()
 
     def _build_index(self):
-        """Build or rebuild the FAISS index"""
+        """Build or rebuild the FAISS index using cosine similarity"""
         if not self.corpus:
             self.index = None
             return
             
         texts = [entry["content"] for entry in self.corpus]
         embeddings = self.model.encode(texts, convert_to_numpy=True)
+        embeddings = normalize(embeddings, norm='l2')  # Normalize for cosine similarity
         
         dimension = embeddings.shape[1]
-        self.index = faiss.IndexFlatL2(dimension)
+        self.index = faiss.IndexFlatIP(dimension)
         self.index.add(embeddings)
-        print(f"Built FAISS index with {len(self.corpus)} entries")
+        print(f"Built FAISS index with {len(self.corpus)} entries (cosine similarity)")
 
     def _clean_text(self, text: str) -> str:
         """Clean and normalize text"""
@@ -204,7 +206,7 @@ class KnowledgeCorpus:
             if idx >= len(self.corpus):  # Handle cases where k > corpus size
                 continue
                 
-            similarity = 1 - D[0][i]
+            similarity = D[0][i]
             results.append((self.corpus[idx]["content"], similarity))
             
         return results
