@@ -246,3 +246,26 @@ class KnowledgeCorpus:
             results.append((self.corpus[idx]["content"], similarity))
             
         return results
+
+if __name__ == "__main__":
+    # Initialize corpus
+    corpus = KnowledgeCorpus()
+    
+    # Populate with knowledge (run periodically to update)
+    print("Fetching from PubMed...")
+    corpus.add_from_pubmed("machine learning in healthcare")
+    
+    print("Fetching from Wikipedia...")
+    corpus.add_from_wikipedia("artificial intelligence")
+    
+    print("Fetching from Google Scholar...")
+    corpus.add_from_scholar("large language models")
+    
+    # Example search
+    query = "What are the applications of AI in medicine?"
+    print(f"\nSearching for: '{query}'")
+    
+    results = corpus.search(query)
+    for i, (content, score) in enumerate(results, 1):
+        print(f"\nResult {i} (Score: {score:.2f}):")
+        print(content[:500] + ("..." if len(content) > 500 else ""))
