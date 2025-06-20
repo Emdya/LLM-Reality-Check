@@ -1,0 +1,85 @@
+/* Results Container */
+.results-container {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.results-summary {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.highlighted-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.highlight-item {
+    padding: 0.5rem;
+    background: rgba(255, 229, 100, 0.2);
+    border-left: 3px solid #FFE564;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+/* Feedback Section */
+.feedback-section {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.feedback-prompt {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.feedback-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.feedback-btn {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    border: none;
+    cursor: pointer;
+}
+
+.feedback-btn.positive {
+    background: rgba(74, 222, 128, 0.1);
+    color: #4ADE80;
+}
+
+.feedback-btn.negative {
+    background: rgba(248, 113, 113, 0.1);
+    color: #F87171;
+}
+
+/* Settings Link */
+.settings-link {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+
+.settings-link:hover {
+    color: var(--text-primary);
+}
