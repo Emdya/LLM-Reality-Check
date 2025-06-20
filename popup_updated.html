@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reality Check</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div id="root">
+        <div class="popup-container">
+            <div class="popup-background"></div>
+            
+            <div class="popup-content">
+                <!-- Header -->
+                <div class="popup-header">
+                    <h1 class="popup-title">Reality Check</h1>
+                    <svg class="popup-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22,4 12,14.01 9,11.01"/>
+                    </svg>
+                </div>
+                
+                <!-- Status Display -->
+                <div class="popup-status">
+                    <div class="status-display" id="statusDisplay">
+                        <div class="status-icon-container default" id="statusIconContainer">
+                            <svg class="status-icon-svg" id="statusIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                <path d="M9 9h6v6H9z"/>
+                            </svg>
+                        </div>
+                        <div class="status-text">
+                            <p class="status-main" id="statusMain">Ready to fact-check AI content</p>
+                            <p class="status-sub" id="statusSub">Click verify to analyze the current page</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Results Container (Initially Hidden) -->
+                <div class="results-container" id="resultsContainer" style="display: none;">
+                    <div class="results-summary" id="resultsSummary"></div>
+                    <div class="highlighted-items" id="highlightedItems"></div>
+                    
+                    <!-- Feedback Section -->
+                    <div class="feedback-section" id="feedbackSection">
+                        <p class="feedback-prompt">Was this analysis helpful?</p>
+                        <div class="feedback-buttons">
+                            <button class="feedback-btn positive" id="feedbackYes">
+                                <svg viewBox="0 0 24 24" width="16" height="16">
+                                    <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
+                                </svg>
+                                Yes
+                            </button>
+                            <button class="feedback-btn negative" id="feedbackNo">
+                                <svg viewBox="0 0 24 24" width="16" height="16">
+                                    <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/>
+                                </svg>
+                                No
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="popup-actions" id="popupActions">
+                    <button class="btn-primary" id="verifyBtn">Verify</button>
+                    <button class="btn-secondary" id="viewDetailsBtn" style="display: none;">View Details</button>
+                </div>
+                
+                <!-- Footer -->
+                <div class="popup-footer">
+                    <p>Powered by AI fact-checking database</p>
+                    <a href="#" class="settings-link" id="settingsLink">
+                        <svg viewBox="0 0 24 24" width="14" height="14">
+                            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.17.1a2 2 0 0 1-2 0l-.15-.1a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v.43a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 1-2 0l-.15-.08A2 2 0 0 1 0 6.54V6a2 2 0 0 0-2-2v16a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.17-.1a2 2 0 0 1 2 0l.15.1a2 2 0 0 1 1 1.73v.18a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.17-.1a2 2 0 0 1 2 0l.15.1a2 2 0 0 1 1 1.73v.18a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
+                        </svg>
+                        Settings
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Decorative elements -->
+            <div class="decoration decoration-1"></div>
+            <div class="decoration decoration-2"></div>
+        </div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
